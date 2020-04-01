@@ -6,7 +6,7 @@ This project uses Gradle, and in principle should be IDE agnostic, although curr
 
 There is a KTLint phase pre-build which will do some very basic auto-formatting and syntax checking to encourage consistent coding standards.
 
-##Dagger
+## Dagger
 The project  uses Dagger 2 to provide dependency injection. An interface/implementation pattern is used.
 
 ## Tests
