@@ -20,5 +20,8 @@
 
         <activity android:name=".feature.about.AboutActivity"
             android:label="@string/common_activity_title"/>
+
+        <activity android:name=".feature.calculator.CalculatorActivity"
+            android:label="@string/common_activity_title"/>
     </application>
 </manifest>

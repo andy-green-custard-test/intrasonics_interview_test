@@ -26,6 +26,12 @@
         <item name="android:background">@color/activity_background</item>
     </style>
 
-    <style name="paragraph"></style>
+    <style name="paragraph"/>
+
+    <style name="multiline_field">
+        <item name="android:lines">4</item>
+    </style>
+
+    <style name="cell"/>
 
 </resources>

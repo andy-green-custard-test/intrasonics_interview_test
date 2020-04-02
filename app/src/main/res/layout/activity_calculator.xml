@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.intrasonics.mobile.numericanalyser.feature.calculator.CalculatorViewModel" />
+    </data>
+
+    <!-- Keeping views tight to the top instead of doing a spaced chain in order to reduce
+    the probability of the keyboard obscuring a UI component -->
+
+    <android.support.constraint.ConstraintLayout
+        style="@style/activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/activity_calculator_title"
+            style="@style/activity_title"
+            android:layout_width="match_parent"
+            android:text="@string/activity_calculator_title"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/activity_calculator_explanation"
+            style="@style/paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_calculator_explanation"
+            app:layout_constraintTop_toBottomOf="@id/activity_calculator_title" />
+
+        <EditText
+            android:id="@+id/activity_calculator_input"
+            style="@style/multiline_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:hint="@string/activity_calculator_input_hint"
+            app:layout_constraintTop_toBottomOf="@id/activity_calculator_explanation"
+            android:text="@={viewModel.rawInput}"/>
+
+        <Button
+            android:id="@+id/activity_calculator_reset_button"
+            style="@style/action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_calculator_reset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_calculator_input"
+            android:onClick="@{viewModel::onResetClick}"/>
+
+        <!-- Care has been taken to avoid allowing the top half of the page to "jump around" when
+        the visibility changes in here: -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_calculator_reset_button">
+
+            <TextView
+                android:id="@+id/activity_calculator_error"
+                style="@style/paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.inputError}"
+                android:visibility="@{viewModel.inputErrorVisibility}" />
+
+            <TableLayout
+                android:id="@+id/activity_calculator_result_table"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.resultTableVisibility}">
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/activity_calculator_result_mean_key"
+                        style="@style/cell"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_calculator_result_mean_key" />
+
+                    <TextView
+                        android:id="@+id/activity_calculator_result_mean_value"
+                        style="@style/cell"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.resultMean}" />
+                </TableRow>
+
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/activity_calculator_result_median_key"
+                        style="@style/cell"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_calculator_result_median_key" />
+
+                    <TextView
+                        android:id="@+id/activity_calculator_result_median_value"
+                        style="@style/cell"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.resultMedian}" />
+                </TableRow>
+
+            </TableLayout>
+
+        </FrameLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

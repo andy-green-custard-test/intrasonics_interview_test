@@ -28,7 +28,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toBottomOf="@id/activity_welcome_title"
-        app:layout_constraintBottom_toTopOf="@+id/activity_welcome_button_about" />
+        app:layout_constraintBottom_toTopOf="@+id/activity_welcome_button_about"
+        android:onClick="@{viewModel::onCalculatorButtonClick}" />
 
     <Button
         android:id="@+id/activity_welcome_button_about"
@@ -39,7 +40,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toBottomOf="@+id/activity_welcome_button_calculator"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:onClick="@{viewModel::onAboutButtonClick}"
-        />
+        android:onClick="@{viewModel::onAboutButtonClick}" />
     </android.support.constraint.ConstraintLayout>
 </layout>

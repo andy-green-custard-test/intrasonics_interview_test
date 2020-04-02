@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class StatisticsProviderImpl @Inject constructor() : StatisticsProvider {
     override fun parseList(rawInput: String): StatisticsProvider.ParseResult {
-        val regex = "[\\W,;:\r\n]+"
+        val regex = """[\s,;:\r\n\-]+"""
         val rawList = rawInput.trim().split(Regex(regex))
         val numbers = rawList.map { it.toDoubleOrNull() }
 

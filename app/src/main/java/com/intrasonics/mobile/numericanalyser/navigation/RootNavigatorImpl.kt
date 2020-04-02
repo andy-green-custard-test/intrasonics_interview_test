@@ -3,6 +3,7 @@ package com.intrasonics.mobile.numericanalyser.navigation
 import android.content.Context
 import android.content.Intent
 import com.intrasonics.mobile.numericanalyser.feature.about.AboutActivity
+import com.intrasonics.mobile.numericanalyser.feature.calculator.CalculatorActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +18,7 @@ import javax.inject.Singleton
 @Singleton
 class RootNavigatorImpl @Inject constructor() : RootNavigator {
     override fun showCalculator(context: Context) {
-        // context.startActivity(Intent(context, CalculatorActivity::class))
+        context.startActivity(Intent(context, CalculatorActivity::class.java))
     }
 
     override fun showAbout(context: Context) {
