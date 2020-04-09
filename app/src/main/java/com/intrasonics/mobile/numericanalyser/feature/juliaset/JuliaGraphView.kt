@@ -12,7 +12,6 @@ import android.util.AttributeSet
 import android.view.View
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
-import kotlin.random.Random
 
 class JuliaGraphView : View {
     constructor(context: Context) : this(context, null)
@@ -52,14 +51,37 @@ class JuliaGraphView : View {
         super.onSizeChanged(w, h, oldw, oldh)
     }
 
-    fun isIn(r: Int, i: Int): Boolean {
-        return Random.nextBoolean()
+    fun isIn(r: Float, i: Float, graphRules: GraphRules): Boolean {
+        val limit = graphRules.veryBig * graphRules.veryBig // Avoid square root at all costs (powers more expensive than multiplying). Also avoid repeated operations
+
+        var r = r // Need mutable versions
+        var i = i
+        for (iteration in 1..graphRules.maximumIterationsToGetBig) {
+            // z = a + bj -> z2 = a2 - b2 + 2ab -> zr = a2 - b2 && zj = 2ab
+            val oldR = r // We need to remember the value BEFORE the iteration in order to correctly calculate i
+            r = r * r - i * i + graphRules.real // I believe multiplication is faster than use of power 2
+            i = 2 * i * oldR
+
+            if (i * i + r * r > limit) { // Multiplication faster than power
+                return false // It's diverged
+            }
+        }
+        return true
     }
 
     /**
      * In principle, I would use data-binding here too - to avoid passing long parameters around - but this is quicker
+     *
+     * Pre-compute using bitmap on another thread ... clearly the use of a proper mutex, or possibly
+     * two alternating mutable bitmap buffers ... or something is required to fix the thread safety
+     * issue. Note that rapidly changing the inputs can cause a wierd issue where the graph
+     * gradually shrinks to width 1
+     *
+     * I did try creating a new bitmap each time, the difference in performance was severe
+     *
+     * I would actually benchmark properly and measure
      */
-    fun updateParamsAndRedraw(stepSize: Int) {
+    fun updateParamsAndRedraw(stepSizePx: Int, graphRules: GraphRules) {
 
         presentFuture?.cancel(false)
 
@@ -68,13 +90,15 @@ class JuliaGraphView : View {
                 val canvas = Canvas(bitmap)
                 canvas.drawRect(0f, 0f, bitmap!!.width.toFloat(), bitmap!!.height.toFloat(), divergentPaint) // Clear canvas
 
-                for (r in 0..bitmap!!.width step stepSize) {
-                    for (i in 0..bitmap!!.height step stepSize) {
-                        if (isIn(r, i)) {
-                            canvas.drawRect(r.toFloat(), // Chunk into squares of size stepSize to reduce the amount of computation required
-                                    i.toFloat(),
-                                    (r + stepSize).toFloat(),
-                                    (i + stepSize).toFloat(),
+                for (x in 0..bitmap!!.width step stepSizePx) {
+                    val r = graphRules.minReal + (graphRules.maxReal - graphRules.minReal) * x / bitmap!!.width
+                    for (y in 0..bitmap!!.height step stepSizePx) {
+                        val i = graphRules.minImaginary + (graphRules.maxImaginary - graphRules.minImaginary) * y / bitmap!!.height
+                        if (isIn(r, i, graphRules)) {
+                            canvas.drawRect(x.toFloat(), // Chunk into squares of size stepSize to reduce the amount of computation required
+                                    y.toFloat(),
+                                    (x + stepSizePx).toFloat(),
+                                    (y + stepSizePx).toFloat(),
                                     convergentPaint)
                         }
                     }

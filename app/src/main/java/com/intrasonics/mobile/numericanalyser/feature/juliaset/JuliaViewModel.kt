@@ -42,8 +42,8 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
 
     val action = MutableLiveData<Action>()
 
-    enum class Action {
-        REDRAW
+    sealed class Action {
+        data class REDRAW(val stepSize: Int, val graphRules: GraphRules) : Action()
     }
 
     private var callback: Observable.OnPropertyChangedCallback
@@ -52,7 +52,7 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
         callback = object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 stepSizePx = STEP_SIZE_MAXIMUM_PX // Jump to worst quality as soon as a user makes any change. This is to improve responsiveness
-                action.value = Action.REDRAW
+                action.value = Action.REDRAW(stepSizePx, graphRules())
             }
         }
 
@@ -62,6 +62,17 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
         realScaleMax.addOnPropertyChangedCallback(callback)
         imaginaryScaleMin.addOnPropertyChangedCallback(callback)
         imaginaryScaleMax.addOnPropertyChangedCallback(callback)
+    }
+
+    private fun graphRules(): GraphRules { // I'd actually do null handling properly if I was doing this at a sensible speed:quality ratio
+        return GraphRules(real.get()!!.toFloat(),
+                imaginary.get()!!.toFloat(),
+                3f,
+                5,
+                realScaleMin.get()!!.toFloat(),
+                realScaleMax.get()!!.toFloat(),
+                imaginaryScaleMin.get()!!.toFloat(),
+                imaginaryScaleMax.get()!!.toFloat())
     }
 
     /**
@@ -74,7 +85,7 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
             since we'll effectively skip the very worst step size*/
         if (stepSizePx > 1) {
             stepSizePx /= 2
-            action.value = Action.REDRAW
+            action.value = Action.REDRAW(stepSizePx, graphRules())
         }
     }
 

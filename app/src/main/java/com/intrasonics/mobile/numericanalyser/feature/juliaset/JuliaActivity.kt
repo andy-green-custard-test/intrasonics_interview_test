@@ -37,8 +37,8 @@ class JuliaActivity : AppCompatActivity() {
         // If commanded to by ViewModel, invalidate the view in order to encourage a redraw
         viewModel.action.observe(this, Observer { action ->
             when (action) {
-                JuliaViewModel.Action.REDRAW -> {
-                    julia_graph_view.updateParamsAndRedraw(viewModel.stepSizePx)
+                is JuliaViewModel.Action.REDRAW -> {
+                    julia_graph_view.updateParamsAndRedraw(action.stepSize, action.graphRules)
                 }
             }
         })
