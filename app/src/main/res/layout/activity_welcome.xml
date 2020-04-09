@@ -23,7 +23,7 @@
     <Button
         android:id="@+id/activity_welcome_button_calculator"
         style="@style/action_button"
-        android:text="@string/activity_welcome_button_julia"
+        android:text="@string/activity_welcome_button_calculator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
