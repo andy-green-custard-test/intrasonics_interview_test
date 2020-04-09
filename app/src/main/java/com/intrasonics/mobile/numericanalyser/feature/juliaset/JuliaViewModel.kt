@@ -3,6 +3,7 @@ package com.intrasonics.mobile.numericanalyser.feature.juliaset
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.Observable
 import android.databinding.ObservableField
+import android.view.View
 import com.intrasonics.mobile.numericanalyser.base.BaseViewModel
 import com.intrasonics.mobile.numericanalyser.navigation.RootNavigator
 import javax.inject.Inject
@@ -15,7 +16,10 @@ import javax.inject.Inject
  * Should be a power of 2. Should be (on average) significantly smaller than the expected viewport
  * size
  */
-const val STEP_SIZE_MAXIMUM_PX = 128
+const val STEP_SIZE_MAXIMUM_PX = 32
+
+const val PAN_MULTIPLIER = 0.25f // 25% of the screen width/height per click
+const val ZOOM_MULTIPLIER = 1.25f // 25% bigger
 
 /**
  * ViewModel to provide input to / control JuliaGraphView
@@ -51,11 +55,14 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
     init {
         callback = object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                stepSizePx = STEP_SIZE_MAXIMUM_PX // Jump to worst quality as soon as a user makes any change. This is to improve responsiveness
-                action.value = Action.REDRAW(stepSizePx, graphRules())
+                onGraphChanged()
             }
         }
 
+        bind()
+    }
+
+    private fun bind() {
         real.addOnPropertyChangedCallback(callback)
         imaginary.addOnPropertyChangedCallback(callback)
         realScaleMin.addOnPropertyChangedCallback(callback)
@@ -64,15 +71,18 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
         imaginaryScaleMax.addOnPropertyChangedCallback(callback)
     }
 
+    /**
+     * Turn the form data into a convenient form for passing around
+     */
     private fun graphRules(): GraphRules { // I'd actually do null handling properly if I was doing this at a sensible speed:quality ratio
-        return GraphRules(real.get()!!.toFloat(),
-                imaginary.get()!!.toFloat(),
+        return GraphRules(real.getFloatOrZero(),
+                imaginary.getFloatOrZero(),
                 3f,
                 5,
-                realScaleMin.get()!!.toFloat(),
-                realScaleMax.get()!!.toFloat(),
-                imaginaryScaleMin.get()!!.toFloat(),
-                imaginaryScaleMax.get()!!.toFloat())
+                realScaleMin.getFloatOrZero(),
+                realScaleMax.getFloatOrZero(),
+                imaginaryScaleMin.getFloatOrZero(),
+                imaginaryScaleMax.getFloatOrZero())
     }
 
     /**
@@ -91,10 +101,57 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
 
     // If viewport changes (even just the keyboard moving and causing the layout to update), then we need to start again - since the bitmap cache is no longer a suitable size
     fun onResizeGraph() {
-        callback.onPropertyChanged(null, 0)
+        onGraphChanged()
     }
 
-    fun onDestroy() {
+    private fun onGraphChanged() {
+        stepSizePx = STEP_SIZE_MAXIMUM_PX // Jump to worst quality as soon as a user makes any change. This is to improve responsiveness
+        action.value = Action.REDRAW(stepSizePx, graphRules())
+    }
+
+    /*** Navigation ***/
+
+    /* Pan left defined as "make the pretty thing move left" - therefore ADD to the start and end values */
+    fun onPanLeftClick(view: View) {
+        val rangeX = realScaleMax.getFloatOrZero() - realScaleMin.getFloatOrZero()
+        realScaleMin.setFloat(realScaleMin.getFloatOrZero() + rangeX * PAN_MULTIPLIER)
+        realScaleMax.setFloat(realScaleMax.getFloatOrZero() + rangeX * PAN_MULTIPLIER)
+    }
+    fun onPanRightClick(view: View) {
+        val rangeX = realScaleMax.getFloatOrZero() - realScaleMin.getFloatOrZero()
+        realScaleMin.setFloat(realScaleMin.getFloatOrZero() - rangeX * PAN_MULTIPLIER)
+        realScaleMax.setFloat(realScaleMax.getFloatOrZero() - rangeX * PAN_MULTIPLIER)
+    }
+    fun onPanUpClick(view: View) {
+        val rangeY = imaginaryScaleMax.getFloatOrZero() + imaginaryScaleMin.getFloatOrZero()
+        imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() + rangeY * PAN_MULTIPLIER)
+        imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() + rangeY * PAN_MULTIPLIER)
+    }
+    fun onPanDownClick(view: View) {
+        val rangeY = imaginaryScaleMax.getFloatOrZero() - imaginaryScaleMin.getFloatOrZero()
+        imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() - rangeY * PAN_MULTIPLIER)
+        imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() - rangeY * PAN_MULTIPLIER)
+    }
+
+    /**
+     * Zooms with respect to the origin of the graph - it's not exactly hard to do what you'd want it to do - it's just 2 more transforms - but then a pinch zoom would be better anyway :-)
+     */
+    fun onZoomInClick(view: View) {
+        realScaleMin.setFloat(realScaleMin.getFloatOrZero() * ZOOM_MULTIPLIER)
+        realScaleMax.setFloat(realScaleMax.getFloatOrZero() * ZOOM_MULTIPLIER)
+        imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() * ZOOM_MULTIPLIER)
+        imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() * ZOOM_MULTIPLIER)
+    }
+    fun onZoomOutClick(view: View) {
+        realScaleMin.setFloat(realScaleMin.getFloatOrZero() / ZOOM_MULTIPLIER)
+        realScaleMax.setFloat(realScaleMax.getFloatOrZero() / ZOOM_MULTIPLIER)
+        imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() / ZOOM_MULTIPLIER)
+        imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() / ZOOM_MULTIPLIER)
+    }
+
+    /*** Teardown ***/
+    // Because this is outside of the managed Android lifecycle, we have to do our own teardown
+        fun onDestroy() {
         real.removeOnPropertyChangedCallback(callback)
         imaginary.removeOnPropertyChangedCallback(callback)
         realScaleMin.removeOnPropertyChangedCallback(callback)
@@ -102,4 +159,20 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
         imaginaryScaleMin.removeOnPropertyChangedCallback(callback)
         imaginaryScaleMax.removeOnPropertyChangedCallback(callback)
     }
+}
+
+/*** Convenience methods to go from primitives to Android data-binding constructs ***/
+private fun ObservableField<String>.setFloat(value: Float) {
+    this.set(value.toString())
+}
+
+private fun ObservableField<String>.getFloatOrZero(): Float {
+    return this.get().toFloatOrZero()
+}
+
+/**
+ * Sure, 0 is almost certainly the wrong value. But this approach allows the graph just disappear when the user puts in invalid, rather than crash out immediately.
+ */
+private fun String?.toFloatOrZero(): Float {
+    return this?.toFloatOrNull() ?: 0f
 }

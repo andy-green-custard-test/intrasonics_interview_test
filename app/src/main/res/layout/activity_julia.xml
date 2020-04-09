@@ -58,5 +58,59 @@
             android:layout_weight="0.75"
             android:background="#000000"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="&lt;"
+                android:onClick="@{viewModel::onPanLeftClick}"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="&gt;"
+                android:onClick="@{viewModel::onPanRightClick}"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="^"
+                android:onClick="@{viewModel::onPanUpClick}"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="v"
+                android:onClick="@{viewModel::onPanDownClick}"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="+"
+                android:onClick="@{viewModel::onZoomInClick}"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="-"
+                android:onClick="@{viewModel::onZoomOutClick}"/>
+
+
+
+
+
+
+
+        </LinearLayout>
+
     </LinearLayout>
 </layout>
