@@ -137,16 +137,16 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
      * Zooms with respect to the origin of the graph - it's not exactly hard to do what you'd want it to do - it's just 2 more transforms - but then a pinch zoom would be better anyway :-)
      */
     fun onZoomInClick(view: View) {
-        realScaleMin.setFloat(realScaleMin.getFloatOrZero() * ZOOM_MULTIPLIER)
-        realScaleMax.setFloat(realScaleMax.getFloatOrZero() * ZOOM_MULTIPLIER)
-        imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() * ZOOM_MULTIPLIER)
-        imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() * ZOOM_MULTIPLIER)
-    }
-    fun onZoomOutClick(view: View) {
         realScaleMin.setFloat(realScaleMin.getFloatOrZero() / ZOOM_MULTIPLIER)
         realScaleMax.setFloat(realScaleMax.getFloatOrZero() / ZOOM_MULTIPLIER)
         imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() / ZOOM_MULTIPLIER)
         imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() / ZOOM_MULTIPLIER)
+    }
+    fun onZoomOutClick(view: View) {
+        realScaleMin.setFloat(realScaleMin.getFloatOrZero() * ZOOM_MULTIPLIER)
+        realScaleMax.setFloat(realScaleMax.getFloatOrZero() * ZOOM_MULTIPLIER)
+        imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() * ZOOM_MULTIPLIER)
+        imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() * ZOOM_MULTIPLIER)
     }
 
     /*** Teardown ***/
