@@ -18,6 +18,10 @@ class WelcomeViewModel @Inject constructor() : BaseViewModel() {
         navigator.showCalculator(view.context)
     }
 
+    fun onJuliaButtonClick(view: View) {
+        navigator.showJulia(view.context)
+    }
+
     fun onAboutButtonClick(view: View) {
         navigator.showAbout(view.context)
     }

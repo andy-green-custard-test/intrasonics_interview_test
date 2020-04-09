@@ -1,6 +1,7 @@
 package com.intrasonics.mobile.numericanalyser.di
 
 import com.intrasonics.mobile.numericanalyser.feature.calculator.CalculatorActivity
+import com.intrasonics.mobile.numericanalyser.feature.juliaset.JuliaActivity
 import com.intrasonics.mobile.numericanalyser.feature.welcome.WelcomeActivity
 import dagger.Component
 import javax.inject.Singleton
@@ -14,4 +15,5 @@ interface AppComponent {
      */
     fun inject(target: WelcomeActivity)
     fun inject(target: CalculatorActivity)
+    fun inject(target: JuliaActivity)
 }

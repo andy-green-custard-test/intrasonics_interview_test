@@ -23,13 +23,24 @@
     <Button
         android:id="@+id/activity_welcome_button_calculator"
         style="@style/action_button"
-        android:text="@string/activity_welcome_button_calculator"
+        android:text="@string/activity_welcome_button_julia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toBottomOf="@id/activity_welcome_title"
-        app:layout_constraintBottom_toTopOf="@+id/activity_welcome_button_about"
+        app:layout_constraintBottom_toTopOf="@+id/activity_welcome_button_julia"
         android:onClick="@{viewModel::onCalculatorButtonClick}" />
+
+        <Button
+            android:id="@+id/activity_welcome_button_julia"
+            style="@style/action_button"
+            android:text="@string/activity_welcome_button_julia"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toBottomOf="@id/activity_welcome_button_calculator"
+            app:layout_constraintBottom_toTopOf="@+id/activity_welcome_button_about"
+            android:onClick="@{viewModel::onJuliaButtonClick}" />
 
     <Button
         android:id="@+id/activity_welcome_button_about"

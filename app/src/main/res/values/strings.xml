@@ -6,6 +6,7 @@
     <!-- Welcome Page -->
     <string name="activity_welcome_title">Please select an option:</string>
     <string name="activity_welcome_button_calculator">Calculator</string>
+    <string name="activity_welcome_button_julia">Julia</string>
     <string name="activity_welcome_button_about">About</string>
 
     <!-- About Page -->
