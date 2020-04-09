@@ -104,12 +104,6 @@
                 android:text="-"
                 android:onClick="@{viewModel::onZoomOutClick}"/>
 
-
-
-
-
-
-
         </LinearLayout>
 
     </LinearLayout>

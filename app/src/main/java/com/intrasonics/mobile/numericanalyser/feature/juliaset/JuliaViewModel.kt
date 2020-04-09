@@ -123,7 +123,7 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
         realScaleMax.setFloat(realScaleMax.getFloatOrZero() - rangeX * PAN_MULTIPLIER)
     }
     fun onPanUpClick(view: View) {
-        val rangeY = imaginaryScaleMax.getFloatOrZero() + imaginaryScaleMin.getFloatOrZero()
+        val rangeY = imaginaryScaleMax.getFloatOrZero() - imaginaryScaleMin.getFloatOrZero()
         imaginaryScaleMin.setFloat(imaginaryScaleMin.getFloatOrZero() + rangeY * PAN_MULTIPLIER)
         imaginaryScaleMax.setFloat(imaginaryScaleMax.getFloatOrZero() + rangeY * PAN_MULTIPLIER)
     }
