@@ -66,7 +66,7 @@ class JuliaGraphView : View {
             // z = a + bj -> z2 = a2 - b2 + 2ab -> zr = a2 - b2 && zj = 2ab
             val oldR = r // We need to remember the value BEFORE the iteration in order to correctly calculate i
             r = r * r - i * i + graphRules.real // I believe multiplication is faster than use of power 2
-            i = 2 * i * oldR
+            i = 2 * i * oldR + graphRules.imaginary
 
             if (i * i + r * r > limit) { // Multiplication faster than power
                 return false // It's diverged
