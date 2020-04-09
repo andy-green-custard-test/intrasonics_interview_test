@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import com.intrasonics.mobile.numericanalyser.R
 import com.intrasonics.mobile.numericanalyser.base.NumericAnalyserApplication
 import com.intrasonics.mobile.numericanalyser.databinding.ActivityJuliaBinding
+import java.util.Timer
 import javax.inject.Inject
+import kotlin.concurrent.schedule
 import kotlinx.android.synthetic.main.activity_julia.*
 
 class JuliaActivity : AppCompatActivity() {
@@ -36,10 +38,21 @@ class JuliaActivity : AppCompatActivity() {
         viewModel.action.observe(this, Observer { action ->
             when (action) {
                 JuliaViewModel.Action.REDRAW -> {
-                    julia_graph_view.invalidate()
+                    julia_graph_view.updateParamsAndRedraw(viewModel.stepSizePx)
                 }
             }
         })
+
+        julia_graph_view.onDrawCallback = {
+            Timer().schedule(1) { //We need to guarantee this will be called on the next "tick"
+                // to avoid an event loop. This seems a cheap and dirty way to achieve that. 0 would
+                // likely work too...
+                runOnUiThread {
+                    viewModel.onCompleteRender()
+                }
+            }
+            null
+        }
     }
 
     override fun onDestroy() {
