@@ -44,7 +44,7 @@ class JuliaActivity : AppCompatActivity() {
         })
 
         julia_graph_view.onDrawCallback = {
-            Timer().schedule(1) { //We need to guarantee this will be called on the next "tick"
+            Timer().schedule(10) { // We need to guarantee this will be called on the next "tick"
                 // to avoid an event loop. This seems a cheap and dirty way to achieve that. 0 would
                 // likely work too...
                 runOnUiThread {
@@ -52,6 +52,10 @@ class JuliaActivity : AppCompatActivity() {
                 }
             }
             null
+        }
+
+        julia_graph_view.onResizeCallback = {
+            viewModel.onResizeGraph()
         }
     }
 

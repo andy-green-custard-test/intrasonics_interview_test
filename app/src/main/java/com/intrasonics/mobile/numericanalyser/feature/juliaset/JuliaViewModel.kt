@@ -78,6 +78,11 @@ class JuliaViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
+    // If viewport changes (even just the keyboard moving and causing the layout to update), then we need to start again - since the bitmap cache is no longer a suitable size
+    fun onResizeGraph() {
+        callback.onPropertyChanged(null, 0)
+    }
+
     fun onDestroy() {
         real.removeOnPropertyChangedCallback(callback)
         imaginary.removeOnPropertyChangedCallback(callback)
