@@ -22,4 +22,10 @@
     <string name="activity_calculator_result_mean_key">Mean</string>
     <string name="activity_calculator_result_median_key">Median</string>
     <string name="activity_calculator_input_validation_invalid">Unable to understand that input. Please try again.</string>
+    <string name="activity_julia_table_heading_input_real">Real Argument</string>
+    <string name="activity_julia_table_heading_input_imaginary">Imaginary</string>
+    <string name="activity_julia_table_heading_axis_real_min">Real axis min</string>
+    <string name="activity_julia_table_heading_axis_real_max">Real axis max</string>
+    <string name="activity_julia_table_heading_axis_imaginary_min">Imaginary Min</string>
+    <string name="activity_julia_table_heading_axis_imaginary_max">Imaginary Max</string>
 </resources>

@@ -1,14 +1,16 @@
 package com.intrasonics.mobile.numericanalyser.feature.juliaset
 
-import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.intrasonics.mobile.numericanalyser.R
 import com.intrasonics.mobile.numericanalyser.base.NumericAnalyserApplication
 import com.intrasonics.mobile.numericanalyser.databinding.ActivityJuliaBinding
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_julia.*
 
-class JuliaActivity : Activity() {
+class JuliaActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModel: JuliaViewModel
@@ -29,5 +31,19 @@ class JuliaActivity : Activity() {
          */
         val binding = DataBindingUtil.setContentView<ActivityJuliaBinding>(this, R.layout.activity_julia)
         binding.viewModel = viewModel
+
+        // If commanded to by ViewModel, invalidate the view in order to encourage a redraw
+        viewModel.action.observe(this, Observer { action ->
+            when (action) {
+                JuliaViewModel.Action.REDRAW -> {
+                    julia_graph_view.invalidate()
+                }
+            }
+        })
+    }
+
+    override fun onDestroy() {
+        viewModel.onDestroy()
+        super.onDestroy()
     }
 }

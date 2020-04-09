@@ -34,4 +34,8 @@
 
     <style name="cell"/>
 
+    <style name="table"></style>
+
+    <style name="table_heading"></style>
+
 </resources>

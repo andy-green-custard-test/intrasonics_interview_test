@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -8,10 +9,54 @@
             type="com.intrasonics.mobile.numericanalyser.feature.juliaset.JuliaViewModel"/>
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         style="@style/activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </android.support.constraint.ConstraintLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.25">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/table">
+
+            <include layout="@layout/row_input"
+                bind:title="@{@string/activity_julia_table_heading_input_real}"
+                bind:value="@={viewModel.real}"/>
+
+            <include layout="@layout/row_input"
+                bind:title="@{@string/activity_julia_table_heading_input_imaginary}"
+                bind:value="@={viewModel.imaginary}"/>
+
+            <include layout="@layout/row_input"
+                bind:title="@{@string/activity_julia_table_heading_axis_real_min}"
+                bind:value="@={viewModel.realScaleMin}"/>
+
+            <include layout="@layout/row_input"
+                bind:title="@{@string/activity_julia_table_heading_axis_real_max}"
+                bind:value="@={viewModel.realScaleMax}"/>
+
+            <include layout="@layout/row_input"
+                bind:title="@{@string/activity_julia_table_heading_axis_imaginary_min}"
+                bind:value="@={viewModel.imaginaryScaleMin}"/>
+
+            <include layout="@layout/row_input"
+                bind:title="@{@string/activity_julia_table_heading_axis_imaginary_max}"
+                bind:value="@={viewModel.imaginaryScaleMax}"/>
+
+        </TableLayout>
+        </ScrollView>
+
+        <com.intrasonics.mobile.numericanalyser.feature.juliaset.JuliaGraphView
+            android:id="@+id/julia_graph_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.75"
+            android:background="#000000"/>
+
+    </LinearLayout>
 </layout>

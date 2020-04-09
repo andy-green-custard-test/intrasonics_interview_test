@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Simple table row containing a label and a field - to allow user to set config -->
+<!-- Uses data binding - two way for value -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="value"
+            type="String" />
+    </data>
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/table_heading"
+            android:layout_width="@dimen/row_header_width"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            tools:text="title"/>
+
+        <EditText
+            style="@style/cell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:text="@={value}"
+            tools:text="Value"/>
+    </TableRow>
+</layout>
